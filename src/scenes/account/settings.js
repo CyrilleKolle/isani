@@ -38,13 +38,7 @@ export default function Settings({ navigation }) {
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
-          routes: [
-            { name: "SignUp" },
-            // {
-            //   name: "Profile",
-            //   params: { user: "jane" },
-            // },
-          ],
+          routes: [{ name: "SignUp" }],
         })
       );
     } catch (e) {
@@ -65,11 +59,10 @@ export default function Settings({ navigation }) {
       <FlatList
         data={accountList}
         renderItem={({ item }) => (
-
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("OptionsDetails");
-              navigation.navigate(item.target)
+              navigation.navigate(item.target);
             }}
             // onPress={handleNavigate}
           >
@@ -120,12 +113,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   row_title: {
-    //color: colors.weather_text_color,
     textAlignVertical: "top",
     includeFontPadding: false,
     flex: 0,
-    //fontSize: values.font_place_size,
-    //fontFamily: values.font_body,
   },
   navButtonText: {
     fontSize: 10,
