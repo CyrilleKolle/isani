@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   View,
@@ -7,25 +7,33 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Button,
 } from "react-native";
-// import {Charities, Charity } from "../AllCategories/Charity";
 import { Charities } from "../../components/Lists/Charity";
-
+import FullCharityList from "./FullCharityList";
+import FavoriteList from "./FavoriteList";
+import DefaultListView from "./DefaultListView";
+import Slider from "./slider/slider";
 function CharityList({ navigation }) {
-  console.log(Charities);
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("SellingForm");
-      }}
-    >
-      <View>
-        <Text>{item.title}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const [selectTab, setSelectTab] = useState("");
+  const setTab = (tab) => {
+    setSelectTab(tab);
+  };
+
+  const selectedTab = () => {
+    switch (selectTab) {
+      case "A":
+        return <FullCharityList />;
+      case "B":
+        return <FavoriteList />;
+      case "C":
+        return <Slider />;
+      default:
+        return <Slider />;
+    }
+  };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.componentContainerStyle}>
       <View style={styles.introContainer}>
         <Text style={styles.introText}>
           Great opportunities to help others seldom come, but small ones
@@ -33,34 +41,44 @@ function CharityList({ navigation }) {
         </Text>
         <Text style={styles.textAuthor}>"Sally Koch"</Text>
       </View>
-      <FlatList
-        data={Charities}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.title}
-      />
+
+      <View>
+        <View style={styles.gridContainer}>
+          <View>
+            <TouchableOpacity onPress={() => setTab("C")}>
+              <Text>Home</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => setTab("A")}>
+              <Text>NGOs</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => setTab("B")}>
+              <Text>Favorites</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ paddingBottom: 10, marginBottom: 10 }}>
+          {selectedTab()}
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 export default CharityList;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //marginTop: StatusBar.currentHeight || 0,
-  },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+  gridContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 10,
   },
   introContainer: {
-    opacity: 0.3,
+    opacity: 0.5,
     marginTop: 20,
-    marginBottom: 50,
+    marginBottom: 30,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -71,5 +89,29 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginTop: 3,
     justifyContent: "flex-end",
+  },
+  componentContainerStyle: {
+    flex: 1,
+    backgroundColor: "rgb(235,235,235)",
+  },
+
+  MainContainer: {
+    justifyContent: "center",
+    flex: 1,
+    paddingTop: Platform.OS === "iOS" ? 20 : 0,
+  },
+
+  FlatList_Item: {
+    padding: 10,
+    fontSize: 18,
+    // height: 44,
+  },
+
+  header_style: {
+    width: "100%",
+    height: 45,
+    backgroundColor: "#020621",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

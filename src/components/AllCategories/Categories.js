@@ -23,76 +23,78 @@ function Categories(props) {
   const { imageUri, titleFirst, titleSecond, subTitle } = props;
 
   function handleDimensin() {
-    // const { imageUri } = props;
-    // setHeight(Image.resolveAssetSource(imageUri).height);
-    // setWidth(Image.resolveAssetSource(imageUri).width);
+    const { imageUri } = props;
+    setHeight(Image.resolveAssetSource(imageUri).height);
+    setWidth(Image.resolveAssetSource(imageUri).width);
   }
   useEffect(() => {
     handleDimensin();
   }, []);
   return (
-    
     <View style={styles.container}>
-      {/* <AButton
-        title={props.titleFirst}
-        modeValue="text"
-        uppercase={false}
-        labelStyle={styles.navButtonText}
+      <TouchableOpacity
+        activeOpacity={0.8}
         onPress={() =>
-          props.navigation.navigate("")
+         props.navigation.navigate("Category", {
+            name: titleFirst,
+          })
         }
-      /> */}
-      <ImageBackground
-        source={imageUri}
         style={{
-          flex: 1,
-          width: 250,
-          height: 250,
-          alignSelf: "stretch",
-          resizeMode: "contain",
-          padding: 5,
+          height: height,
         }}
       >
-        <View
-          style={{
-            flex: 2,
-            justifyContent: "flex-end",
-            paddingBottom: 5,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "500",
-            }}
-          >
-            {titleFirst}
-          </Text>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "500",
-            }}
-          >
-            {titleSecond}
-          </Text>
-        </View>
-        <View
+        <ImageBackground
+          source={imageUri}
           style={{
             flex: 1,
+            width: 250,
+            height: 250,
+            alignSelf: "stretch",
+            resizeMode: "contain",
+            padding: 5,
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: 18,
-              color: "#46c17e",
-              fontWeight: "500",
+              flex: 2,
+              justifyContent: "flex-end",
+              paddingBottom: 5,
             }}
           >
-            {subTitle}
-          </Text>
-        </View>
-      </ImageBackground>
+            <Text
+              style={{
+                fontSize: 30,
+                fontWeight: "500",
+              }}
+            >
+              {titleFirst}
+            </Text>
+            <Text
+              style={{
+                fontSize: 30,
+                fontWeight: "500",
+              }}
+            >
+              {titleSecond}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                color: "#46c17e",
+                fontWeight: "500",
+              }}
+            >
+              {subTitle}
+            </Text>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
     </View>
   );
 }

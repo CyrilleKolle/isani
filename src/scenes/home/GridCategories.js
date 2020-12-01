@@ -42,17 +42,7 @@ export default function Example(props) {
     { name: "Appliances", code: "#e74c3c", image: appliances },
     { name: "Others", code: "#e74c3c", image: others },
   ]);
-  //   const { imageUri, titleFirst, titleSecond, subTitle } = props;
-  //   const [width, setWidth] = useState(null);
-  //   const [height, setHeight] = useState(null);
-  //   function handleDimensin() {
-  //     const { imageUri } = props;
-  //     setHeight(Image.resolveAssetSource(imageUri).height);
-  //     setWidth(Image.resolveAssetSource(imageUri).width);
-  //   }
-  //   useEffect(() => {
-  //     handleDimensin();
-  //   }, []);
+
   return (
     <FlatGrid
       itemDimension={130}

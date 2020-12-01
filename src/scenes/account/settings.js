@@ -9,10 +9,12 @@ import {
   SafeAreaView,
   StatusBar,
 } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import { checkUser } from "../../api/user/user";
 import { accountList } from "../../components/Lists/accountList";
 import AButton from "../../components/GuideInput/AButton";
 import * as firebase from "firebase";
+import TermsContext from "../../components/Context/accountContext/TermsContext";
 
 export default function Settings({ navigation }) {
   const [user, setUser] = useState(false);
@@ -32,10 +34,30 @@ export default function Settings({ navigation }) {
   const handleSignOut = async () => {
     try {
       await firebase.auth().signOut();
-      navigation.navigate("SignUp");
+      //navigation.navigate("SignUp");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            { name: "SignUp" },
+            // {
+            //   name: "Profile",
+            //   params: { user: "jane" },
+            // },
+          ],
+        })
+      );
     } catch (e) {
       console.log("error logging out" + e);
     }
+  };
+  const location = useContext(TermsContext);
+  console.log(location);
+
+  const handleNavigate = () => {
+    accountList.map((nav) =>
+      location === nav.title ? navigation.navigate("Terms") : null
+    );
   };
 
   return (
@@ -47,6 +69,7 @@ export default function Settings({ navigation }) {
             onPress={() => {
               navigation.navigate("OptionsDetails");
             }}
+            // onPress={handleNavigate}
           >
             <View style={styles.container}>
               <View style={styles.roww}>
@@ -59,7 +82,7 @@ export default function Settings({ navigation }) {
       />
       <AButton
         title="Sign Out"
-        modeValue="text"
+        modeValue="contained"
         uppercase={false}
         labelStyle={styles.navButtonText}
         onPress={handleSignOut}

@@ -1,16 +1,20 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import AButton from "../../components/GuideInput/AButton";
+import { Icon } from "react-native-elements";
 
 function Search({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>
-        Proceeds from the sale of your items will be donated to an organisation
-        of your choices. click on continue to choose an organisation
+      <View style={styles.icon}>
+        <Icon name="error-outline" color="#3ce53c" size={50} />
+      </View>
+      <Text style={styles.text}>
+        Proceeds from the sale of your items will be donated to an NGO
+        of your choices. 
       </Text>
       <AButton
-        title="Continue"
+        title="Continue ->"
         modeValue="Contained"
         uppercase={false}
         labelStyle={styles.continue}
@@ -29,6 +33,19 @@ const styles = StyleSheet.create({
   },
   continue: {
     fontSize: 22,
+    color: "#3ce53c",
   },
+  icon:{
+    paddingBottom:60
+  },
+  text:{
+    fontSize:15,
+    marginLeft:10,
+    marginRight:10,
+    fontWeight:"bold",
+    alignSelf:"center",
+    alignItems:"center"
+    
+  }
 });
 export default Search;

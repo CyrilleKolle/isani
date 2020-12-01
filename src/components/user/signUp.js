@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { Title, IconButton } from "react-native-paper";
+import { CommonActions } from "@react-navigation/native";
 import AInput from "../GuideInput/AInput";
 import AButton from "../GuideInput/AButton";
 import { signUp } from "../../api/user/user";
@@ -16,7 +17,19 @@ function SignUp({ navigation, setSignIn }) {
     console.log(promise);
     switch (promise) {
       case "success":
-        navigation.navigate("Settings");
+        //navigation.navigate("Settings");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: "Settings" },
+              // {
+              //   name: "Profile",
+              //   params: { user: "jane" },
+              // },
+            ],
+          })
+        );
         break;
       case "inuse":
         SetFeedback("The chosen e-mail is already in use");

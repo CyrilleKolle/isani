@@ -27,10 +27,10 @@ export default function Fashion({ navigation }) {
             /> */}
 
         <View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate("Female")}
-          >
+          > */}
             <Categories
               imageUri={Female}
               titleFirst="Womens"
@@ -40,7 +40,7 @@ export default function Fashion({ navigation }) {
 
               // {...this.props}
             />
-          </TouchableOpacity>
+         {/* / </TouchableOpacity> */}
         </View>
 
         <Categories

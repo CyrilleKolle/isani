@@ -7,7 +7,9 @@ import {
   Button,
   FlatList,
   SafeAreaView,
+  Header,
 } from "react-native";
+import TermsAndConditions from './termsConditions'
 
 export default function OptionDetails(props) {
   return (
