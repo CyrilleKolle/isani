@@ -20,9 +20,11 @@ export default function GuideButton({ title, modeValue, ...rest }) {
 const styles = StyleSheet.create({
   button: {
     marginTop: 10,
+    marginBottom: 10,
   },
   buttonContainer: {
-    width: width / 2,
+    width: width / 1.5,
     height: height / 15,
+    backgroundColor: "#98DDB5",
   },
 });

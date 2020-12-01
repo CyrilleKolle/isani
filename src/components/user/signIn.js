@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
   },
   loginButtonLabel: {
     fontSize: 22,
+    backgroundColor: "#98DDB5",
+    color: "#f5f5f5",
   },
   navButtonText: {
     fontSize: 16,

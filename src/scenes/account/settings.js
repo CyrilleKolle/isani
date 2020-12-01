@@ -65,9 +65,11 @@ export default function Settings({ navigation }) {
       <FlatList
         data={accountList}
         renderItem={({ item }) => (
+
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("OptionsDetails");
+              navigation.navigate(item.target)
             }}
             // onPress={handleNavigate}
           >

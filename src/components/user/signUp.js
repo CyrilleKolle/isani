@@ -38,12 +38,12 @@ function SignUp({ navigation, setSignIn }) {
         break;
       case "invalid":
         SetFeedback("invalid-email");
-        //navigation.navigate("Modal");
+        navigation.navigate("Modal");
         <AuthModalScreen />;
         break;
       case "error":
         SetFeedback("That email address is invalid!");
-        // navigation.navigate("Modal");
+        navigation.navigate("Modal");
         <AuthScreenModal />;
         break;
     }
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   },
   loginButtonLabel: {
     fontSize: 22,
+    color: "#f5f5f5",
   },
   navButtonText: {
     fontSize: 18,

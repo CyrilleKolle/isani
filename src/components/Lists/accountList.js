@@ -1,5 +1,5 @@
 export const accountList = [
-  { title: "Profile" },
+  { title: "Profile", targetScreen: "Profile" },
   { title: "Messages" },
   { title: "Reviews" },
   { title: "Settings" },
