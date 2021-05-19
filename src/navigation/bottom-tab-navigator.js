@@ -6,7 +6,7 @@ import PlanningNavigator from "../navigation/bottom-navigation/planning-navigati
 import SearchNavigator from "../navigation/bottom-navigation/search-navigation";
 import SettingsNavigator from "../navigation/bottom-navigation/settings-navigation";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
+import AccountTabScreen from "../scenes/account/AccountTabScreen";
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -51,11 +51,11 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "favorites",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="thumb-up" color={color} size={size} />
+            <MaterialCommunityIcons name="heart" color={color} size={size} />
           ),
         }}
         component={PlanningNavigator}
-        name="Planning"
+        name="Favorites"
       />
       <BottomTab.Screen
         options={{
@@ -64,8 +64,8 @@ export default function BottomTabNavigator() {
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
-        component={SettingsNavigator}
-        name="Settings"
+        component={AccountTabScreen}
+        name="Account"
       />
     </BottomTab.Navigator>
   );

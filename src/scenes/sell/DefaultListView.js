@@ -1,25 +1,16 @@
 import React from "react";
-
 import ImageSlider from "react-native-image-slider";
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableHighlight,
   SafeAreaView,
 } from "react-native";
 import KidImage from "../../../assets/Kids.jpg";
 
 function DefaultView() {
-  const images = [
-   KidImage, KidImage, KidImage, KidImage
-
-    // "https://placeimg.com/640/640/people",
-    // "https://placeimg.com/640/640/animals",
-    // "https://placeimg.com/640/640/beer",
-  ];
+  const images = [KidImage, KidImage, KidImage, KidImage];
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content1}>
@@ -29,12 +20,6 @@ function DefaultView() {
         loopBothSides
         autoPlayWithInterval={100}
         images={images}
-        // customSlide={({ index, item, style, width }) => (
-        //   // It's important to put style here because it's got offset inside
-        //   <View key={index} style={[style, styles.customSlide]}>
-        //     <Image source={ item} style={styles.customImage} />
-        //   </View>
-        // )}
         customButtons={(position, move) => (
           <View style={styles.buttons}>
             {images.map((image, index) => {

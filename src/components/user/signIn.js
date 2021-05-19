@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-// import { Title } from "react-native-paper";
+import { Title } from "react-native-paper";
 import { CommonActions } from "@react-navigation/native";
 import AInput from "../GuideInput/AInput";
 import AButton from "../GuideInput/AButton";
@@ -16,34 +16,21 @@ function SignIn({ navigation, setSignIn }) {
     console.log("this is sign in" + promise);
     switch (promise) {
       case "success":
-        // navigation.navigate("Settings");
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [
-              { name: "Settings" },
-              // {
-              //   name: "Profile",
-              //   params: { user: "jane" },
-              // },
-            ],
+            routes: [{ name: "BottomNav" }],
           })
         );
         break;
       case "inuse":
         SetFeedback("The chosen e-mail is already in use");
-        //navigation.navigate("Modal");
-
         break;
       case "invalid":
         SetFeedback("invalid-email");
-        //navigation.navigate("Modal");
-
         break;
       case "error":
         SetFeedback("That email address is invalid!");
-        // navigation.navigate("Modal");
-
         break;
     }
   };
@@ -54,7 +41,7 @@ function SignIn({ navigation, setSignIn }) {
         <Text>{feedback}</Text>
       </View>
       <View style={styles.container}>
-        {/* <Title style={styles.titleText}>Welcome to Chat app</Title> */}
+        <Title style={styles.titleText}>welcome to isani</Title>
         <AInput
           labelName="Email"
           value={email}
@@ -68,16 +55,17 @@ function SignIn({ navigation, setSignIn }) {
           onChangeText={(userPassword) => setPassword(userPassword)}
         />
         <AButton
-          title="Login"
+          size="large"
+          backgroundColor="filled"
+          text="Login"
           modeValue="contained"
-          labelStyle={styles.loginButtonLabel}
-          onPress={handleSignIn}
+          onPress={() => handleSignIn()}
         />
         <AButton
-          title="New user?"
+          text="New user?"
+          size="large"
           modeValue="text"
           uppercase={false}
-          labelStyle={styles.navButtonText}
           onPress={() => navigation.navigate("SignUp")}
         />
       </View>
@@ -102,9 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#98DDB5",
     color: "#f5f5f5",
   },
-  navButtonText: {
-    fontSize: 16,
-  },
+
   feedback: {
     marginTop: 50,
     color: "red",

@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from "react-native";
 export default function Planning() {
   return (
     <View style={styles.container}>
-      <Text>Planning</Text>
+      <Text>Favourites</Text>
     </View>
   );
 }

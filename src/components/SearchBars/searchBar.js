@@ -11,7 +11,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
                 autoCapitalize='none'
                 autoCorrect={false}
                 style={styles.inputStyle}
-                placeholder="search on just"
+                placeholder="search on isani categories"
                 value={term}
                 onChangeText={newTerm => onTermChange(newTerm)}
                 //onChangeText={onTermChange}  shorten

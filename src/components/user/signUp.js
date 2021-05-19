@@ -5,7 +5,6 @@ import { CommonActions } from "@react-navigation/native";
 import AInput from "../GuideInput/AInput";
 import AButton from "../GuideInput/AButton";
 import { signUp } from "../../api/user/user";
-import AuthModalScreen from "../Modal/modalScenes/AuthModalScreen";
 
 function SignUp({ navigation, setSignIn }) {
   const [email, setEmail] = useState("");
@@ -17,34 +16,20 @@ function SignUp({ navigation, setSignIn }) {
     console.log(promise);
     switch (promise) {
       case "success":
-        //navigation.navigate("Settings");
         navigation.dispatch(
           CommonActions.reset({
-            index: 1,
-            routes: [
-              { name: "Settings" },
-              // {
-              //   name: "Profile",
-              //   params: { user: "jane" },
-              // },
-            ],
+            routes: [{ name: "BottomNav" }],
           })
         );
         break;
       case "inuse":
         SetFeedback("The chosen e-mail is already in use");
-        //navigation.navigate("Modal");
-        <AuthModalScreen />;
         break;
       case "invalid":
-        SetFeedback("invalid-email");
-        navigation.navigate("Modal");
-        <AuthModalScreen />;
+        SetFeedback("The email address is invalid!");
         break;
       case "error":
-        SetFeedback("That email address is invalid!");
-        navigation.navigate("Modal");
-        <AuthScreenModal />;
+        SetFeedback("Error creating email!");
         break;
     }
   };
@@ -70,21 +55,15 @@ function SignUp({ navigation, setSignIn }) {
           onChangeText={(userPassword) => setPassword(userPassword)}
         />
         <AButton
-          title="Signup"
+          text="Signup"
+          size="large"
           modeValue="contained"
           labelStyle={styles.loginButtonLabel}
-          onPress={handleSignUp}
+          onPress={() => handleSignUp()}
         />
-        {/* <AButton
-        icon="keyboard-backspace"
-        size={30}
-        style={styles.navButton}
-        color="#6646ee"
-        onPress={() => navigation.navigate("SignIn")}
-        //onPress={() => setSignIn(true)}
-      /> */}
         <AButton
-          title="Sign in instead"
+          text="Sign in instead"
+          size="large"
           modeValue="text"
           uppercase={false}
           labelStyle={styles.navButtonText}

@@ -4,13 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Button,
   FlatList,
   SafeAreaView,
   StatusBar,
 } from "react-native";
 import { CommonActions } from "@react-navigation/native";
-import { checkUser } from "../../api/user/user";
 import { accountList } from "../../components/Lists/accountList";
 import AButton from "../../components/GuideInput/AButton";
 import * as firebase from "firebase";
@@ -19,26 +17,13 @@ import TermsContext from "../../components/Context/accountContext/TermsContext";
 export default function Settings({ navigation }) {
   const [user, setUser] = useState(false);
 
-  useEffect(() => {
-    userAuthenticated();
-  }, []);
-
-  const userAuthenticated = async () => {
-    const signedIn = await checkUser();
-    if (!signedIn) {
-      //setUser(true);
-      navigation.navigate("SignUp");
-    }
-    console.log(signedIn);
-  };
   const handleSignOut = async () => {
     try {
       await firebase.auth().signOut();
-      //navigation.navigate("SignUp");
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
-          routes: [{ name: "SignUp" }],
+          routes: [{ name: "BottomNav" }],
         })
       );
     } catch (e) {
@@ -53,19 +38,18 @@ export default function Settings({ navigation }) {
       location === nav.title ? navigation.navigate("Terms") : null
     );
   };
+  const openDetails = (item) => {
+    navigation.navigate(item.targetScreen, {
+      item,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.v_container}>
       <FlatList
         data={accountList}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("OptionsDetails");
-              navigation.navigate(item.target);
-            }}
-            // onPress={handleNavigate}
-          >
+          <TouchableOpacity onPress={() => openDetails(item)}>
             <View style={styles.container}>
               <View style={styles.roww}>
                 <Text style={styles.row_title}>{item.title}</Text>
@@ -75,18 +59,27 @@ export default function Settings({ navigation }) {
         )}
         keyExtractor={(item) => item.title}
       />
-      <AButton
-        title="Sign Out"
-        modeValue="contained"
-        uppercase={false}
-        labelStyle={styles.navButtonText}
-        onPress={handleSignOut}
-      />
+      <View style={styles.bcontainer}>
+        <AButton
+          text="Sign Out"
+          modeValue="Outlined"
+          uppercase={false}
+          labelStyle={styles.navButtonText}
+          onPress={() => handleSignOut()}
+          style={{ borderRadius: 10 }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  bcontainer: {
+    backgroundColor: "#f5f5f5",
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
   v_container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
@@ -118,6 +111,6 @@ const styles = StyleSheet.create({
     flex: 0,
   },
   navButtonText: {
-    fontSize: 10,
+    fontSize: 14,
   },
 });

@@ -3,10 +3,8 @@ import {
   FlatList,
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
 } from "react-native";
 import { Charities } from "../../components/Lists/Charity";
 

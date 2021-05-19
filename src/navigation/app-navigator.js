@@ -2,6 +2,7 @@ import React from "react";
 import BottomTabNavigator from "./bottom-tab-navigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import AuthenticationNavigation from "./bottom-navigation/auth-navigation";
 
 const Stack = createStackNavigator();
 

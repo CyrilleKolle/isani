@@ -71,3 +71,46 @@ export const signUp = (email, password) => {
       });
   });
 };
+export const submitSaleForm = (
+  title,
+  description,
+  charity,
+  category,
+  price,
+  image1,
+  image2,
+  image3,
+  image4,
+  id,
+  location
+) => {
+  const userId = Firebase.auth().currentUser.uid;
+
+  return new Promise((resolve, reject) => {
+    Firebase.database()
+      .ref("listings/")
+      .push()
+      .set({
+        title,
+        description,
+        charity,
+        category,
+        price,
+        image1,
+        image2,
+        image3,
+        image4,
+        id,
+        location
+      })
+      .then(() => {
+        resolve("success");
+      })
+      .catch((error) => {
+        resolve("error");
+        console.log("error ", error);
+      });
+  });
+};
+
+export const retrieveData = () => {};

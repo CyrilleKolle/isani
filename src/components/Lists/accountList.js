@@ -1,9 +1,9 @@
 export const accountList = [
-  { title: "Profile", targetScreen: "Profile" },
-  { title: "Messages" },
-  { title: "Reviews" },
-  { title: "Settings" },
-  { title: "FAQ" },
-  { title: "Contact Customer Service" },
-  { title: "Terms and Conditions" },
+  { title: "Profile", targetScreen: "ProfileInformation" },
+  { title: "Messages", targetScreen: "Messages" },
+  { title: "Reviews", targetScreen: "Reviews" },
+  { title: "AccountSettings", targetScreen: "AccountSettings" },
+  { title: "FAQ", targetScreen: "FAQ" },
+  { title: "Contact Customer Service", targetScreen: "CustomerService" },
+  { title: "Terms and Conditions", targetScreen: "Terms" },
 ];

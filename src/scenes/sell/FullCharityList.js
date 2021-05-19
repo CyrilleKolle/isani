@@ -3,10 +3,8 @@ import {
   FlatList,
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
 } from "react-native";
 import { Charities } from "../../components/Lists/Charity";
 
@@ -45,16 +43,7 @@ function FullCharityList({ navigation }) {
         navigation.navigate("SellingForm");
       }}
     >
-      <View
-      //style={styles.contentContainerStyle}
-      >
-        <Text
-          style={styles.FlatList_Item}
-          //style={styles.buttonContainerStyle}
-        >
-          {item.title}
-        </Text>
-      </View>
+      <Text style={styles.FlatList_Item}>{item.title}</Text>
     </TouchableOpacity>
   );
   return (

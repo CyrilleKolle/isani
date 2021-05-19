@@ -8,16 +8,11 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-// import {
-//   widthPercentageToDP as wp,
-//   heightPercentageToDP as hp,
-// } from "react-native-responsive-screen";
-import AButton from "../GuideInput/AButton";
-// import AInput from "../components/AInput";
-// import backgroundImage from "../../assets/backgroundImage.jpg";
+import { useNavigation } from "@react-navigation/native";
 
 function Categories(props) {
   //const { width } = Dimensions.get("window");
+  const navigation = useNavigation();
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   const { imageUri, titleFirst, titleSecond, subTitle } = props;
@@ -30,13 +25,16 @@ function Categories(props) {
   useEffect(() => {
     handleDimensin();
   }, []);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() =>
-         props.navigation.navigate("Category", {
-            name: titleFirst,
+          navigation.navigate("Listings", {
+            item: {
+              name: titleFirst,
+            },
           })
         }
         style={{
@@ -52,6 +50,7 @@ function Categories(props) {
             alignSelf: "stretch",
             resizeMode: "contain",
             padding: 5,
+            borderRadius: 20,
           }}
         >
           <View
@@ -105,6 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginRight: 10,
+    borderRadius: 20,
   },
   name: {
     color: "#5a647d",

@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  FlatList,
   View,
   Text,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
-  Button,
 } from "react-native";
-import { Charities } from "../../components/Lists/Charity";
 import FullCharityList from "./FullCharityList";
 import FavoriteList from "./FavoriteList";
-import DefaultListView from "./DefaultListView";
-import Slider from "./slider/slider";
 function CharityList({ navigation }) {
   const [selectTab, setSelectTab] = useState("");
   const setTab = (tab) => {

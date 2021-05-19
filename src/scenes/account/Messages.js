@@ -7,7 +7,7 @@ import {
   FlatList,
 } from "react-native";
 import { accountList } from "../../components/Lists/accountList";
-export default function AccountOptions({ navigation }) {
+export default function Messages({ navigation }) {
   console.log(navigation);
 
   return (

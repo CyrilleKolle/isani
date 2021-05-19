@@ -9,12 +9,12 @@ import {
   SafeAreaView,
   Header,
 } from "react-native";
-import TermsAndConditions from './termsConditions'
+import TermsAndConditions from "./termsConditions";
 
-export default function OptionDetails(props) {
+export default function ProfileInformation(props) {
   return (
     <View style={styles.container}>
-      <Text>Details</Text>
+      <Text>{props.name}</Text>
     </View>
   );
 }

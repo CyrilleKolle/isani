@@ -1,66 +1,44 @@
-import React, { useContext, useState, useResults } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import Categories from "../../components/AllCategories/Categories";
 import Male from "../../../assets/Male.jpg";
 import Female from "../../../assets/Female.jpg";
 import Kids from "../../../assets/Kids.jpg";
 import Constants from "expo-constants";
-export default function Fashion({ navigation }) {
+export default function Fashion(props) {
   const [term, setTerm] = useState("");
 
   return (
-    // <SafeAreaView>
-    //<View style={styles.main}>
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView} horizontal={true}>
-        {/* <GuideButton
-                modeValue='contained'
-                title='Add Room'
-                onPress={() => props.navigation.navigate('AddRoom')}
-            /> */}
+      <View>
+        <ScrollView style={styles.scrollView} horizontal={true}>
+          <Categories
+            imageUri={Female}
+            titleFirst="Women"
+            titleSecond="Fashion"
+            subTitle="Women Clothes!"
+            screenProps="Super"
+            {...props}
+          />
 
-        <View>
-          {/* <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("Female")}
-          > */}
-            <Categories
-              imageUri={Female}
-              titleFirst="Womens"
-              titleSecond="Fashion"
-              subTitle="Women Clothes!"
-              screenProps="Super"
+          <Categories
+            imageUri={Male}
+            titleFirst="Men"
+            titleSecond="Fashion"
+            subTitle="Pure. Old Fashioned."
+            {...props}
+          />
 
-              // {...this.props}
-            />
-         {/* / </TouchableOpacity> */}
-        </View>
-
-        <Categories
-          imageUri={Male}
-          titleFirst="Mens"
-          titleSecond="Fashion"
-          subTitle="Pure. Old Fashioned."
-          // {...this.props}
-        />
-
-        <Categories
-          imageUri={Kids}
-          titleFirst="Kids"
-          titleSecond="Fashion"
-          subTitle="For the smallest."
-          // {...this.props}
-        />
-      </ScrollView>
+          <Categories
+            imageUri={Kids}
+            titleFirst="Kids"
+            titleSecond="Fashion"
+            subTitle="For the smallest."
+            {...props}
+          />
+        </ScrollView>
+      </View>
     </SafeAreaView>
-    // //{" "}
   );
 }
 
@@ -69,7 +47,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+    borderRadius: 10,
   },
   text: {
     fontSize: 42,
