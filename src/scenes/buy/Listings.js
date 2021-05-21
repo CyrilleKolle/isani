@@ -31,6 +31,14 @@ const ItemText = styled.Text`
   font-size: 10px;
   font-weight: 500;
   opacity: 0.6;
+  flex-wrap: wrap;
+  width: 150px;
+`;
+const ItemLocation = styled.Text`
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.6;
 `;
 const ItemPriceView = styled.View`
   width: 100%;
@@ -78,7 +86,7 @@ export default function Listings() {
   const inputRange = [0, 1];
   const outputRange = [1, 0.8];
   const scale = animation.interpolate({ inputRange, outputRange });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState(false);
   const [favoriteList, setFavoriteList] = useState([{}]);
 
@@ -89,32 +97,30 @@ export default function Listings() {
       setUserId(Id);
     }
   };
-  useEffect(() => {
-    setLoading(true);
-  }, []);
+
   useEffect(() => {
     userAuthenticated();
   }, []);
 
-  const handleRetrieveData = () => {
-    const listingData = Firebase.database().ref("listings/");
-    listingData.once("value", function(snapshot) {
-      if (snapshot.val() !== null) {
-        const list = Object.values(snapshot.val());
-        setData(list);
-      } else {
-        setData([]);
-      }
-      setLoading(false);
-    });
-  };
-
   useEffect(() => {
+    let isMounted = true;
     const interval = setInterval(() => {
-      handleRetrieveData();
+      const listingData = Firebase.database().ref("listings/");
+      listingData.once("value", function(snapshot) {
+        if (snapshot.val() !== null) {
+          if (isMounted) {
+            const list = Object.values(snapshot.val());
+            setData(list);
+          }
+        } else {
+          setData([]);
+        }
+        setLoading(false);
+      });
     }, 100);
     return () => {
       clearInterval(interval);
+      isMounted = false;
     };
   }, [refreshing]);
 
@@ -166,7 +172,7 @@ export default function Listings() {
           onPressOut={() => onPressOut(index)}
         >
           <Image
-            source={{ uri: item.image2 }}
+            source={{ uri: item.image1 }}
             style={{ width: "100%", height: 180, borderRadius: 5 }}
           />
           <ItemTextContainer>
@@ -182,9 +188,9 @@ export default function Listings() {
                     <View style={{ alignItems: "flex-end" }}>
                       <MaterialCommunityIcons name="map-marker" size={15} />
                     </View>
-                    <ItemText style={{ alignItems: "flex-end" }}>
+                    <ItemLocation style={{ alignItems: "flex-end" }}>
                       gothenburg
-                    </ItemText>
+                    </ItemLocation>
                   </Location>
                   <TouchableOpacity onPress={() => handleFavorite(item, index)}>
                     <Heart>
@@ -242,7 +248,7 @@ export default function Listings() {
                           content.category === router.params.item.name
                       )
                 }
-                keyExtractor={(item, index) => item.id}
+                keyExtractor={(item, index) => item.title}
                 renderItem={renderItem}
                 refreshControl={
                   <RefreshControl
@@ -274,7 +280,7 @@ export default function Listings() {
                       (content) => content.category === router.params.item.name
                     )
               }
-              keyExtractor={(item, index) => item.id}
+              keyExtractor={(item, index) => item.title}
               renderItem={renderItem}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

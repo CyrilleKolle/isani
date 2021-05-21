@@ -28,10 +28,15 @@ import { categoriesList } from "../../components/Lists/categoriesList";
 import uuid from "react-native-uuid";
 import * as Location from "expo-location";
 import { KeyboardAvoidingView } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ButtonContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+`;
+const Tick = styled.View`
+  text-align: right;
+  align-self: flex-end;
 `;
 const Divider = styled.View`
   width: 600px;
@@ -75,6 +80,9 @@ export const SellingForm = () => {
   const postId = uuid.v4();
   const [city, setCity] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
+  const [charitySelectedBoolean, setCharitySelectedBoolean] = useState([]);
+  const [categorySelectedBoolean, setcategorySelectedBoolean] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const onOpen = () => {
     modalizeRef.current?.open();
@@ -157,27 +165,6 @@ export const SellingForm = () => {
       console.warn(E);
     }
   };
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-      const location = await Location.getCurrentPositionAsync({});
-      const place = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-      console.log(place);
-      let city;
-      place.find((p) => {
-        city = p.city;
-        setCity(city);
-      });
-      console.log(city);
-    })();
-  }, []);
 
   const { handleSubmit, control, formState, setValue, reset } = useForm({
     mode: "onChange",
@@ -213,7 +200,14 @@ export const SellingForm = () => {
         break;
     }
   };
+  const handleSelectCharity = (item, index) => {
+    setCharitySelectedBoolean(charitySelectedBoolean[index]);
+  };
+  const handleSelectCategory = (item, index) => {};
 
+  const renderItem = ({ item }) => {
+    return;
+  };
   return (
     <ScrollView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
@@ -357,6 +351,7 @@ export const SellingForm = () => {
                 value={value}
                 placeholder={"title"}
                 required={true}
+                autoCorrect={false}
               />
             </KeyboardAvoidingView>
           )}
@@ -382,6 +377,7 @@ export const SellingForm = () => {
                 placeholder={"Description"}
                 required={true}
                 multiline={true}
+                autoCorrect={false}
               />
             </KeyboardAvoidingView>
           )}
@@ -407,6 +403,7 @@ export const SellingForm = () => {
                 value={value}
                 placeholder={"price"}
                 required={true}
+                autoCorrect={false}
               />
             </KeyboardAvoidingView>
           )}
@@ -435,22 +432,41 @@ export const SellingForm = () => {
                       adjustToContentHeight={true}
                       flatListProps={{
                         data: Charities,
-                        renderItem: (item) => {
-                          value = item.item.title;
+                        renderItem: ({ item, index }) => {
+                          value = item.title;
+                          //console.log(item.index);
+
                           return (
-                            <View>
-                              <View style={styles.modalTextView}>
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    setSelectedCharity(item.item.title);
-                                  }}
-                                >
+                            <View style={styles.modalTextView}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  setSelectedCharity(item.title);
+                                  charitySelectedBoolean[
+                                    index
+                                  ] = !charitySelectedBoolean[index];
+                                  setCharitySelectedBoolean(
+                                    charitySelectedBoolean
+                                  );
+                                  setRefresh(!refresh);
+                                  modalizeRefCharity.current.close();
+                                }}
+                              >
+                                <View style={styles.modalInner}>
                                   <Text style={styles.modalText}>
-                                    {item.item.title}
+                                    {item.title}
                                   </Text>
-                                </TouchableOpacity>
-                                <View style={styles.divider}></View>
-                              </View>
+                                  {charitySelectedBoolean[index] && (
+                                    <Tick>
+                                      <MaterialCommunityIcons
+                                        name={"check"}
+                                        color={"green"}
+                                        size={24}
+                                      />
+                                    </Tick>
+                                  )}
+                                </View>
+                              </TouchableOpacity>
+                              <View style={styles.divider}></View>
                             </View>
                           );
                         },
@@ -490,19 +506,29 @@ export const SellingForm = () => {
                       renderItem: (item) => {
                         value = item.item.title;
                         return (
-                          <View>
-                            <View style={styles.modalTextView}>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  setCategoryItem(item.item.title);
-                                }}
-                              >
+                          <View style={styles.modalTextView}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                setCategoryItem(item.item.title);
+                                setcategorySelectedBoolean(
+                                  !categorySelectedBoolean
+                                );
+                              }}
+                            >
+                              <View style={styles.modalInner}>
                                 <Text style={styles.modalText}>
                                   {item.item.title}
                                 </Text>
-                              </TouchableOpacity>
-                              <View style={styles.divider}></View>
-                            </View>
+                                <Tick>
+                                  <MaterialCommunityIcons
+                                    name={categorySelectedBoolean && "check"}
+                                    color={categorySelectedBoolean && "green"}
+                                    size={30}
+                                  />
+                                </Tick>
+                              </View>
+                            </TouchableOpacity>
+                            <View style={styles.divider}></View>
                           </View>
                         );
                       },
@@ -626,6 +652,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  modalInner: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    elevation: 5,
+
+    marginVertical: "auto",
+  },
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 10,
@@ -644,8 +677,10 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   modalTextView: {
-    marginLeft: 10,
-    marginRight: 10,
+    margin: 12,
+    marginVertical: "auto",
+    paddingBottom: 5,
+    paddingTop: 5,
   },
   centeredView: {
     flex: 1,

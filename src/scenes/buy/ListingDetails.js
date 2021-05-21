@@ -59,7 +59,7 @@ export default function ListingDetails() {
           <Divider style={styles.divider1} />
 
           <View style={styles.detailsItemsView}>
-            <Text style={styles.detailsItemText}>Price:</Text>
+            <Text style={styles.titleText}>Price:</Text>
             <Text>{route.params.data.price} kr</Text>
           </View>
         </List.Section>
@@ -133,10 +133,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     opacity: 0.4,
+    fontWeight: "600",
   },
   categoryTitle: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    fontWeight: "600",
+
     // position: "right",
   },
   categoryView: {
@@ -164,21 +167,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     opacity: 0.4,
+    fontWeight: "600",
   },
   titleTitle: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    fontWeight: "600",
     // position: "right",
   },
   detailsItemsView: {
-    height: Dimensions.get("screen").width / 10,
     // width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     alignContent: "center",
     borderRadius: 10,
-    // padding: 10,
+    flexGrow: 1,
+    paddingTop: 10,
   },
   detailsItemText: {
     opacity: 0.5,
@@ -186,6 +191,7 @@ const styles = StyleSheet.create({
   },
   divider1: {
     height: 2,
+    marginBottom: 10,
   },
   descriptionView: {
     marginTop: 20,
