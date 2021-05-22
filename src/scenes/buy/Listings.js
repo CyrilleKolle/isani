@@ -20,6 +20,8 @@ import Header from "./Header";
 import ListingHeader from "./ListingHeader";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+const { width } = Dimensions.get("window").width;
+
 const ItemTextContainer = styled.View`
   margin-left: 10px;
   margin-right: 10px;
@@ -32,7 +34,7 @@ const ItemText = styled.Text`
   font-weight: 500;
   opacity: 0.6;
   flex-wrap: wrap;
-  width: 150px;
+  max-width: 200px;
 `;
 const ItemLocation = styled.Text`
   margin-bottom: 10px;
@@ -41,9 +43,7 @@ const ItemLocation = styled.Text`
   opacity: 0.6;
 `;
 const ItemPriceView = styled.View`
-  width: 100%;
   align-content: center;
-  margin-bottom: 28px;
 `;
 const ItemPriceText = styled.Text`
   font-size: 26px;
@@ -63,6 +63,7 @@ const LocationAndFavorite = styled.View`
   text-align: right;
 `;
 const Location = styled.View`
+  margin-top: 5px;
   flex-direction: column;
   justify-content: space-between;
   align-self: flex-end;
@@ -70,6 +71,7 @@ const Location = styled.View`
 const Heart = styled.View`
   text-align: right;
   align-self: flex-end;
+  margin-bottom: 5px;
 `;
 
 const TopInfo = styled.View`
@@ -87,8 +89,10 @@ export default function Listings() {
   const outputRange = [1, 0.8];
   const scale = animation.interpolate({ inputRange, outputRange });
   const [loading, setLoading] = useState(true);
-  const [favorite, setFavorite] = useState(false);
+  const [favorite, setFavorite] = useState([]);
   const [favoriteList, setFavoriteList] = useState([{}]);
+  const [addToCart, setAddTocart] = useState([]);
+  const [cartArray, setCartArray] = useState([]);
 
   const userAuthenticated = async () => {
     const signedIn = await checkUser();
@@ -162,6 +166,7 @@ export default function Listings() {
       console.log(favoriteList);
     });
   };
+
   const renderItem = ({ item, index }) => (
     <>
       <Animated.View key={index} style={[styles.itemContainer]}>
@@ -179,29 +184,53 @@ export default function Listings() {
             <TopInfo>
               <View>
                 <ItemText>{item.title}</ItemText>
-                <ItemText numberOfLines={1}>{item.description}</ItemText>
+                <ItemText numberOfLines={3}>{item.description}</ItemText>
                 <ItemText numberOfLines={1}>{item.charity}</ItemText>
               </View>
               <View>
                 <LocationAndFavorite>
-                  <Location>
-                    <View style={{ alignItems: "flex-end" }}>
-                      <MaterialCommunityIcons name="map-marker" size={15} />
-                    </View>
-                    <ItemLocation style={{ alignItems: "flex-end" }}>
-                      gothenburg
-                    </ItemLocation>
-                  </Location>
-                  <TouchableOpacity onPress={() => handleFavorite(item, index)}>
+                  <TouchableOpacity onPress={() => {
+                    favorite[index] = !favorite[index]
+                    setFavorite(favorite)
+                  }}>
                     <Heart>
                       <MaterialCommunityIcons
                         name={favorite ? "heart" : "heart-outline"}
-                        color={favorite ? "red" : "gray"}
-                        size={30}
+                        color={favorite[index] ? "red" : "gray"}
+                        size={24}
+                      />
+                    </Heart>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      addToCart[index] = !addToCart[index];
+                      setAddTocart(addToCart);
+                      console.log(addToCart);
+                      if (addToCart) {
+                        setCartArray((cartArray) => [...cartArray, item]);
+                      } else {
+                        cartArray.splice(index, 0);
+                        setCartArray((cartArray) => [...cartArray, item]);
+                      }
+                      console.log(cartArray);
+                    }}
+                  >
+                    <Heart>
+                      <MaterialCommunityIcons
+                        name={!addToCart[index] ? "cart-plus" : "cart-minus"}
+                        size={24}
                       />
                     </Heart>
                   </TouchableOpacity>
                 </LocationAndFavorite>
+                <Location>
+                  <View style={{ alignItems: "flex-end" }}>
+                    <MaterialCommunityIcons name="map-marker" size={15} />
+                  </View>
+                  <ItemLocation style={{ alignItems: "flex-end" }}>
+                    gothenburg
+                  </ItemLocation>
+                </Location>
               </View>
             </TopInfo>
             <ItemPriceView>
@@ -217,7 +246,15 @@ export default function Listings() {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   };
-  useEffect(() => onRefresh, []);
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      onRefresh();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   const wait = (timeout) => {
     return new Promise((resolve) => {
       setTimeout(resolve, timeout);
@@ -306,7 +343,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     margin: 10,
 
-    height: Dimensions.get("window").height / 3,
     flexGrow: 2,
     alignContent: "center",
     borderRadius: 10,

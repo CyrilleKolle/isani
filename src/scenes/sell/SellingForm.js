@@ -523,7 +523,7 @@ export const SellingForm = () => {
                                   <MaterialCommunityIcons
                                     name={categorySelectedBoolean && "check"}
                                     color={categorySelectedBoolean && "green"}
-                                    size={30}
+                                    size={24}
                                   />
                                 </Tick>
                               </View>

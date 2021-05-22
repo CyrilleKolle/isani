@@ -5,8 +5,6 @@ import LottieView from "lottie-react-native";
 export default class App extends React.Component {
   componentDidMount() {
     this.animation.play();
-    // Or set a specific startFrame and endFrame with:
-    // this.animation.play(30, 120);
   }
 
   resetAnimation = () => {
@@ -25,9 +23,8 @@ export default class App extends React.Component {
             width: 200,
             height: 200,
           }}
-          source={require("../../../assets/loading1.json")}
+          source={require("../../../assets/loading-spinner.json")}
         />
-        
       </View>
     );
   }
