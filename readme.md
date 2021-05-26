@@ -1,8 +1,8 @@
-Playground app called isani. Items you sell go directly to your chosen charity
+# Playground app called isani. Items you sell go directly to your chosen charity
 
-### Start project
+## Start project by cloning repo
 
-## Run
-# clone project
-# run npm install
-# expo start
+#### Run
+1. clone project
+2. run npm install
+3. expo start
