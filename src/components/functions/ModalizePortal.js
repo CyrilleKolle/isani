@@ -11,7 +11,7 @@ function ModalizePortal({ placeholder, }) {
 
   return <SafeAreaView style={styles.componentContainerStyle}></SafeAreaView>;
 }
-export default CharityList;
+export default ModalizePortal;
 
 const styles = StyleSheet.create({
   gridContainer: {

@@ -19,6 +19,9 @@ import ColorLoader from "../../components/Loader/ColorLoader";
 import Header from "./Header";
 import ListingHeader from "./ListingHeader";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { handleSaveFavorite } from "../../api/user/user";
+import Toast from "react-native-root-toast";
+import PayForm from "../../components/functions/PayForm";
 
 const { width } = Dimensions.get("window").width;
 
@@ -46,10 +49,13 @@ const ItemPriceView = styled.View`
   align-content: center;
 `;
 const ItemPriceText = styled.Text`
-  font-size: 26px;
+  font-size: 20px;
   color: red;
   font-weight: 700;
   align-self: center;
+  border-width: 0.5px;
+  padding: 10px;
+  border-radius: 8px;
 `;
 const Indicator = styled.View`
   align-content: center;
@@ -93,12 +99,14 @@ export default function Listings() {
   const [favoriteList, setFavoriteList] = useState([{}]);
   const [addToCart, setAddTocart] = useState([]);
   const [cartArray, setCartArray] = useState([]);
+  const [showPayForm, setShowPayForm] = useState(false);
 
   const userAuthenticated = async () => {
     const signedIn = await checkUser();
     if (signedIn) {
       const Id = Firebase.auth().currentUser.uid;
       setUserId(Id);
+      console.log(userId);
     }
   };
 
@@ -149,22 +157,37 @@ export default function Listings() {
         useNativeDriver: true,
       }).start();
   };
-  const handleFavorite = (item, index) => {
-    data.find((index1, item1) => {
-      data[index1] = index;
-      // if (!favorite) {
-      setFavoriteList((favoriteList) => Object.keys(favoriteList), item1);
-      setFavorite(!favorite);
-      // } else {
-      //   favoriteList.splice(index, 1);
-      //   setFavoriteList(favoriteList);
-      //   setFavorite(!favorite);
+  const handleFavorite = async (item) => {
+    console.log(favoriteList);
+    const promise = await handleSaveFavorite(item);
+    console.log(promise);
+    switch (promise) {
+      case "success":
+        <Toast
+          duration={Toast.durations.SHORT}
+          position={Toast.positions.CENTER}
+          shadow={true}
+          animation={true}
+          delay={0}
+          visible={true}
+        >
+          saved to favorites
+        </Toast>;
+        break;
 
-      //}
-
-      console.log(!favorite);
-      console.log(favoriteList);
-    });
+      case "error":
+        <Toast
+          duration={Toast.durations.SHORT}
+          position={Toast.positions.CENTER}
+          shadow={true}
+          animation={true}
+          delay={2}
+          visible={true}
+        >
+          error adding to favorites
+        </Toast>;
+        break;
+    }
   };
 
   const renderItem = ({ item, index }) => (
@@ -173,8 +196,8 @@ export default function Listings() {
         <TouchableOpacity
           key={index}
           onPress={() => openDetails(item)}
-          onPressIn={() => onPressIn(index)}
-          onPressOut={() => onPressOut(index)}
+          onPressIn={() => onPressIn(favorite[index])}
+          onPressOut={() => onPressOut(favorite[index])}
         >
           <Image
             source={{ uri: item.image1 }}
@@ -189,16 +212,29 @@ export default function Listings() {
               </View>
               <View>
                 <LocationAndFavorite>
-                  <TouchableOpacity onPress={() => {
-                    favorite[index] = !favorite[index]
-                    setFavorite(favorite)
-                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      favorite[index] = !favorite[index];
+                      setFavorite(favorite);
+                      if (favorite[index]) {
+                        setFavoriteList((favoriteList) => [
+                          ...favoriteList,
+                          item,
+                        ]);
+                        handleFavorite(favoriteList);
+                      } else {
+                        return;
+                      }
+                    }}
+                  >
                     <Heart>
-                      <MaterialCommunityIcons
-                        name={favorite ? "heart" : "heart-outline"}
-                        color={favorite[index] ? "red" : "gray"}
-                        size={24}
-                      />
+                      {!favorite[index] && (
+                        <MaterialCommunityIcons
+                          name={favorite[index] ? "heart" : "heart-outline"}
+                          color={favorite[index] ? "red" : "gray"}
+                          size={24}
+                        />
+                      )}
                     </Heart>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -234,17 +270,27 @@ export default function Listings() {
               </View>
             </TopInfo>
             <ItemPriceView>
-              <ItemPriceText>{item.price} kr</ItemPriceText>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowPayForm(!showPayForm);
+                }}
+              >
+                <ItemPriceText>{item.price} kr</ItemPriceText>
+              </TouchableOpacity>
             </ItemPriceView>
           </ItemTextContainer>
         </TouchableOpacity>
       </Animated.View>
     </>
   );
-
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
   const onRefresh = () => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    wait(1000).then(() => setRefreshing(false));
   };
   useEffect(() => {
     let isMounted = true;
@@ -255,11 +301,7 @@ export default function Listings() {
       isMounted = false;
     };
   }, []);
-  const wait = (timeout) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, timeout);
-    });
-  };
+
   return (
     <>
       {loading ? (
@@ -327,6 +369,7 @@ export default function Listings() {
           </View>
         </>
       )}
+      {showPayForm && <PayForm />}
     </>
   );
 }

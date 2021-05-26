@@ -32,7 +32,7 @@ class Detail extends Component {
     colorBorderColor: "gray",
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.sizeBox = new Animated.Value(hp("65%"));
     this.colorBox = new Animated.Value(hp("65%"));
   }

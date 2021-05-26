@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import AppNavigator from "./src/navigation/app-navigator";
 import { Host } from "react-native-portalize";
 import { StatusBar } from "react-native";
 import NetInformation from "./src/components/Network/NetInformation";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { ContextValue } from "./src/components/Context/Buy/CartContext";
+
 export default function App() {
   return (
     <>

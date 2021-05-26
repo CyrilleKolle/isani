@@ -2,7 +2,7 @@ import React from "react";
 import { Button, StyleSheet, View, Text } from "react-native";
 import LottieView from "lottie-react-native";
 
-export default class ColorLoader extends React.Component {
+export default class Completed extends React.Component {
   componentDidMount() {
     this.animation.play();
   }
@@ -16,6 +16,7 @@ export default class ColorLoader extends React.Component {
     return (
       <View style={styles.animationContainer}>
         <LottieView
+          loop={false}
           ref={(animation) => {
             this.animation = animation;
           }}
@@ -23,7 +24,7 @@ export default class ColorLoader extends React.Component {
             width: 200,
             height: 200,
           }}
-          source={require("../../../assets/loading-spinner.json")}
+          source={require("../../../assets/complete.json")}
         />
       </View>
     );

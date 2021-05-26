@@ -15,7 +15,7 @@ const AButton = ({
   const large = width / 1.5;
   const small = width / 2;
   const btnSize = size === "large" ? large : small;
-  const btnBgColor = type === "filled" ? "#3f51b5" : "transparent";
+  const btnBgColor = type === "filled" ? "#3f51b5" : "red";
   const btnTextColor = type === "filled" ? "#ffffff" : "#6371c2";
   const btnBorderRadius = bordered ? 30 : 5;
 

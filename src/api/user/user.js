@@ -101,7 +101,7 @@ export const submitSaleForm = (
         image3,
         image4,
         id,
-        location
+        location,
       })
       .then(() => {
         resolve("success");
@@ -113,4 +113,18 @@ export const submitSaleForm = (
   });
 };
 
-export const retrieveData = () => {};
+export const handleSaveFavorite = (item) => {
+  const userId = Firebase.auth().currentUser.uid;
+  return new Promise((resolve, reject) => {
+    Firebase.database()
+      .ref("favorites/" + userId)
+      .set(item)
+      .then(() => {
+        resolve("success");
+      })
+      .catch((error) => {
+        resolve("error");
+        console.log("error ", error);
+      });
+  });
+};

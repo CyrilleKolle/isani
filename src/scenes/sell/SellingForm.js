@@ -8,7 +8,6 @@ import {
   Alert,
   TouchableOpacity,
   Platform,
-  Modal,
   TouchableHighlight,
   ScrollView,
   SafeAreaView,
@@ -29,6 +28,7 @@ import uuid from "react-native-uuid";
 import * as Location from "expo-location";
 import { KeyboardAvoidingView } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Modal from "react-native-modal";
 
 const ButtonContainer = styled.View`
   flex-direction: row;
@@ -81,7 +81,7 @@ export const SellingForm = () => {
   const [city, setCity] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [charitySelectedBoolean, setCharitySelectedBoolean] = useState([]);
-  const [categorySelectedBoolean, setcategorySelectedBoolean] = useState(false);
+  const [categorySelectedBoolean, setcategorySelectedBoolean] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   const onOpen = () => {
@@ -200,14 +200,7 @@ export const SellingForm = () => {
         break;
     }
   };
-  const handleSelectCharity = (item, index) => {
-    setCharitySelectedBoolean(charitySelectedBoolean[index]);
-  };
-  const handleSelectCategory = (item, index) => {};
 
-  const renderItem = ({ item }) => {
-    return;
-  };
   return (
     <ScrollView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
@@ -303,22 +296,16 @@ export const SellingForm = () => {
         </ScrollView>
         <Modal
           animationType="slide"
-          transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
           }}
+          onBackdropPress={() => {
+            setModalVisible(!modalVisible);
+          }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </TouchableHighlight>
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                 onPress={openCamera}
@@ -448,7 +435,10 @@ export const SellingForm = () => {
                                     charitySelectedBoolean
                                   );
                                   setRefresh(!refresh);
-                                  modalizeRefCharity.current.close();
+                                  setTimeout(
+                                    () => modalizeRefCharity.current.close(),
+                                    800
+                                  );
                                 }}
                               >
                                 <View style={styles.modalInner}>
@@ -503,29 +493,39 @@ export const SellingForm = () => {
                     adjustToContentHeight={true}
                     flatListProps={{
                       data: categoriesList,
-                      renderItem: (item) => {
-                        value = item.item.title;
+                      renderItem: ({ item, index }) => {
+                        value = item.title;
                         return (
                           <View style={styles.modalTextView}>
                             <TouchableOpacity
                               onPress={() => {
-                                setCategoryItem(item.item.title);
+                                setCategoryItem(item.title);
+                                categorySelectedBoolean[
+                                  index
+                                ] = !categorySelectedBoolean[index];
                                 setcategorySelectedBoolean(
-                                  !categorySelectedBoolean
+                                  categorySelectedBoolean
+                                );
+                                setRefresh(!refresh);
+                                setTimeout(
+                                  () => modalizeRef.current.close(),
+                                  800
                                 );
                               }}
                             >
                               <View style={styles.modalInner}>
                                 <Text style={styles.modalText}>
-                                  {item.item.title}
+                                  {item.title}
                                 </Text>
-                                <Tick>
-                                  <MaterialCommunityIcons
-                                    name={categorySelectedBoolean && "check"}
-                                    color={categorySelectedBoolean && "green"}
-                                    size={24}
-                                  />
-                                </Tick>
+                                {categorySelectedBoolean[index] && (
+                                  <Tick>
+                                    <MaterialCommunityIcons
+                                      name={"check"}
+                                      color={"green"}
+                                      size={24}
+                                    />
+                                  </Tick>
+                                )}
                               </View>
                             </TouchableOpacity>
                             <View style={styles.divider}></View>
@@ -636,10 +636,6 @@ const styles = StyleSheet.create({
     borderColor: "#ec5990",
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -656,7 +652,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     elevation: 5,
-
     marginVertical: "auto",
   },
   openButton: {
@@ -683,10 +678,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   centeredView: {
-    flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 122,
   },
 });
 
