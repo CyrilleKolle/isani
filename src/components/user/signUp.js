@@ -5,11 +5,14 @@ import { CommonActions } from "@react-navigation/native";
 import AInput from "../GuideInput/AInput";
 import AButton from "../GuideInput/AButton";
 import { signUp } from "../../api/user/user";
+import TextInput from "../GuideInput/TextInput";
+import TextForm from "../GuideInput/TextForm";
 
 function SignUp({ navigation, setSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedback, SetFeedback] = useState("");
+  const [terms, setTerms] = useState(false);
 
   const handleSignUp = async () => {
     const promise = await signUp(email, password);
@@ -54,6 +57,12 @@ function SignUp({ navigation, setSignIn }) {
           secureTextEntry={true}
           onChangeText={(userPassword) => setPassword(userPassword)}
         />
+        <TextInput
+          onPress={() => {
+            setTerms(true);
+          }}
+          labelName="By siging up you agree to isani terms of conditions"
+        />
         <AButton
           text="Signup"
           size="large"
@@ -69,6 +78,7 @@ function SignUp({ navigation, setSignIn }) {
           labelStyle={styles.navButtonText}
           onPress={() => navigation.navigate("SignIn")}
         />
+        {terms && <TextForm />}
       </View>
     </View>
   );
