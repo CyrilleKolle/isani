@@ -1,10 +1,18 @@
 import React from "react";
-import { Text, SafeAreaView } from "react-native";
+import { Text, SafeAreaView, StyleSheet } from "react-native";
 
 export default function FAQ({ navigation }) {
   return (
-    <SafeAreaView>
-      <Text>Faq</Text>
+    <SafeAreaView style={styles.container}>
+      <Text>Frequently asked questions</Text>
     </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#f5f5f5",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

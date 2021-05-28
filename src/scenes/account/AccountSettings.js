@@ -16,19 +16,20 @@ import AButton from "../../components/GuideInput/AButton";
 import * as firebase from "firebase";
 import TermsContext from "../../components/Context/accountContext/TermsContext";
 
-export default function AccountSettings({ navigation }) {
+export default function AccountSettings() {
   return (
     <SafeAreaView style={styles.v_container}>
       <Text>Account details</Text>
-      <Text>{navigation.titleParams}</Text>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   v_container: {
+    backgroundColor: "#f5f5f5",
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     marginTop: 20,

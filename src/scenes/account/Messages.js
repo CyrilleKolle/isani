@@ -1,31 +1,10 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
-import { accountList } from "../../components/Lists/accountList";
-export default function Messages({ navigation }) {
-  console.log(navigation);
+import { View, StyleSheet, Text } from "react-native";
 
+export default function Messages() {
   return (
     <View style={styles.container}>
-      <FlatList
-        data={accountList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("OptionsDetails");
-            }}
-            style={{ margin: 20 }}
-          >
-            <Text>{item.title}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.title}
-      />
+      <Text>Messages here</Text>
     </View>
   );
 }

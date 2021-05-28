@@ -75,8 +75,8 @@ export default function Settings({ navigation }) {
 
 const styles = StyleSheet.create({
   bcontainer: {
-    backgroundColor: "#f5f5f5",
 
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -85,30 +85,29 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   container: {
-    marginTop: 20,
+    marginTop: 17,
     alignSelf: "stretch",
   },
   roww: {
     elevation: 1,
     borderRadius: 5,
-    backgroundColor: "#e3e3e3",
+    backgroundColor: "#e9e9e9",
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 18,
+    paddingBottom: 18,
     paddingLeft: 18,
     paddingRight: 16,
     marginLeft: 14,
     marginRight: 14,
-    marginTop: 0,
-    marginBottom: 0,
   },
   row_title: {
     textAlignVertical: "top",
-    includeFontPadding: false,
-    flex: 0,
+fontWeight: 'bold',
+    flex: 1,
+
   },
   navButtonText: {
     fontSize: 14,
