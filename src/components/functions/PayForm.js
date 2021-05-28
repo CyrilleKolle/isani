@@ -60,7 +60,7 @@ function PayForm() {
             <Button
               title="Cancel"
               onPress={() => {
-                setIsVisible(!visible);
+                setIsVisible(!visible);          
               }}
             />
             <Button title="Pay" onPress={handleSubmit} />
