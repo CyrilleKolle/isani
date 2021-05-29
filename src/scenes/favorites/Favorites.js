@@ -96,7 +96,6 @@ export default function Favorites() {
     if (signedIn) {
       const Id = Firebase.auth().currentUser.uid;
       setUserId(Id);
-      console.log(userId);
     }
   };
 
@@ -131,7 +130,6 @@ export default function Favorites() {
           if (isMounted) {
             const list = Object.values(snapshot.val());
             setData(list);
-            console.log(data);
           }
         } else {
           setData([]);
@@ -145,7 +143,16 @@ export default function Favorites() {
     };
   }, [refreshing]);
 
-  const handleRemoveFavorite = () => {};
+  const handleRemoveFavorite = (itemId) => {
+    var remRef = Firebase.database().ref("favorites/" + userId);
+    remRef.on("child_added", (data) => {
+      var key = data.val();
+      console.log(key);
+      if (itemId === data.val().id) {
+        remRef.set(null);
+      }
+    });
+  };
   const openDetails = (data) => {
     console.log("open details");
     navigation.navigate("ListingDetails", {
@@ -183,7 +190,7 @@ export default function Favorites() {
                           ...favoriteList,
                           item,
                         ]);
-                        handleFavorite(favoriteList);
+                        handleRemoveFavorite(item.id);
                       } else {
                         return;
                       }
@@ -203,14 +210,12 @@ export default function Favorites() {
                     onPress={() => {
                       addToCart[index] = !addToCart[index];
                       setAddTocart(addToCart);
-                      console.log(addToCart);
                       if (addToCart) {
                         setCartArray((cartArray) => [...cartArray, item]);
                       } else {
                         cartArray.splice(index, 0);
                         setCartArray((cartArray) => [...cartArray, item]);
                       }
-                      console.log(cartArray);
                     }}
                   >
                     <Heart>
@@ -243,7 +248,6 @@ export default function Favorites() {
               <TouchableOpacity
                 onPress={() => {
                   setShowPayForm(!showPayForm);
-                  console.log(showPayForm);
                 }}
               >
                 <ItemPriceText>{item.price} kr</ItemPriceText>
@@ -271,7 +275,7 @@ export default function Favorites() {
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={<ListingHeader />}
               data={data}
-              keyExtractor={(item, index) => item.title}
+              keyExtractor={(item, index) => item.id}
               renderItem={renderItem}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
