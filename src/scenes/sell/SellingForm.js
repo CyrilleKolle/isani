@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Text,
   View,
   StyleSheet,
-  TextInput,
-  Button,
   Alert,
   TouchableOpacity,
   Platform,
@@ -13,6 +10,7 @@ import {
   SafeAreaView,
   Dimensions,
 } from "react-native";
+import { TextInput, Text, Button } from "react-native-paper";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { useForm, Controller, set } from "react-hook-form";
 import { Charities } from "../../components/Lists/Charity";
@@ -55,8 +53,15 @@ const ImageHolder = styled.Image`
 const TextSelectContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 13px;
+  padding-bottom: 13px;
   padding-left: 10px;
   padding-right: 10px;
+  border-width: 0.5px;
+  border-radius: 5px;
+  opacity: 0.8;
 `;
 export const SellingForm = () => {
   const navigation = useNavigation();
@@ -77,7 +82,7 @@ export const SellingForm = () => {
   const [descriptionText, setDescriptionText] = useState("");
   const [titleText, setTitleText] = useState("");
   const [price, setPrice] = useState();
-  const postId = uuid.v4();
+  const [postId, setPostId] = useState();
   const [city, setCity] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [charitySelectedBoolean, setCharitySelectedBoolean] = useState([]);
@@ -171,6 +176,18 @@ export const SellingForm = () => {
     shouldUnregister: false,
   });
   const { isValid } = formState;
+  function generateRandomId() {
+    setPostId(() => {
+      return Math.random() * 100;
+    });
+  }
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      generateRandomId();
+    }, 1000);
+    return () => clearTimeout(interval);
+  }, []);
+
   const onSubmit = async () => {
     console.log("this is image 1: " + image1);
     const promise = await submitSaleForm(
@@ -298,7 +315,7 @@ export const SellingForm = () => {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
           }}
           onBackdropPress={() => {
             setModalVisible(!modalVisible);
@@ -321,7 +338,6 @@ export const SellingForm = () => {
             </View>
           </View>
         </Modal>
-
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -329,14 +345,16 @@ export const SellingForm = () => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
               <TextInput
-                style={styles.input}
+                style={{ opacity: 0.5 }}
+                label={"Title"}
+                labelName={"Title"}
+                mode={"outlined"}
                 onBlur={onBlur}
                 onChangeText={(value) => {
                   onChange(value);
                   setTitleText(value);
                 }}
                 value={value}
-                placeholder={"title"}
                 required={true}
                 autoCorrect={false}
               />
@@ -345,7 +363,6 @@ export const SellingForm = () => {
           name="title"
           rules={{ required: true }}
         />
-        <Divider />
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -353,14 +370,17 @@ export const SellingForm = () => {
               behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
               <TextInput
-                style={[styles.input, styles.textArea]}
+                style={{ opacity: 0.5 }}
+                mode={"outlined"}
+                label={"Description"}
+                labelName={"Description"}
                 onBlur={onBlur}
                 onChangeText={(value) => {
                   onChange(value);
                   setDescriptionText(value);
                 }}
                 value={value}
-                numberOfLines={100}
+                numberOfLines={10}
                 placeholder={"Description"}
                 required={true}
                 multiline={true}
@@ -371,7 +391,6 @@ export const SellingForm = () => {
           name="description"
           rules={{ required: true }}
         />
-        <Divider />
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -381,14 +400,19 @@ export const SellingForm = () => {
               keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
             >
               <TextInput
-                style={styles.input}
+                style={{ opacity: 0.5 }}
+                mode={"outlined"}
+                selectionColor="#ffc000"
+                underlineColor="#ffc000"
+                outlineColor="#ffc000"
+                labelName={"Price"}
+                label={"Price"}
                 onBlur={onBlur}
                 onChangeText={(value) => {
                   onChange(value);
                   setPrice(value);
                 }}
                 value={value}
-                placeholder={"price"}
                 required={true}
                 autoCorrect={false}
               />
@@ -397,7 +421,6 @@ export const SellingForm = () => {
           name="price"
           rules={{ required: true }}
         />
-        <Divider />
         <View>
           <View>
             <Controller
@@ -407,9 +430,9 @@ export const SellingForm = () => {
                   <TouchableOpacity onPress={onOpenCharity}>
                     <TextSelectContainer>
                       <Text style={styles.label}>
-                        {selectedCharity ? selectedCharity : "select charity"}
+                        {selectedCharity ? selectedCharity : "Select Charity"}
                       </Text>
-                      <Text> {">"} </Text>
+                      <Text style={styles.label}> {">"} </Text>
                     </TextSelectContainer>
                   </TouchableOpacity>
                   <Portal>
@@ -456,7 +479,6 @@ export const SellingForm = () => {
                                   )}
                                 </View>
                               </TouchableOpacity>
-                              <View style={styles.divider}></View>
                             </View>
                           );
                         },
@@ -472,8 +494,6 @@ export const SellingForm = () => {
               rules={{ required: true }}
             />
           </View>
-
-          <Divider />
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -483,7 +503,7 @@ export const SellingForm = () => {
                     <Text style={styles.label}>
                       {categoryItem ? categoryItem : "select category"}
                     </Text>
-                    <Text> {">"} </Text>
+                    <Text style={styles.label}> {">"} </Text>
                   </TextSelectContainer>
                 </TouchableOpacity>
                 <Portal>
@@ -528,7 +548,6 @@ export const SellingForm = () => {
                                 )}
                               </View>
                             </TouchableOpacity>
-                            <View style={styles.divider}></View>
                           </View>
                         );
                       },
@@ -547,28 +566,39 @@ export const SellingForm = () => {
         <ButtonContainer>
           <ResetButton>
             <Button
+              compact={true}
+              mode={"contained"}
               title="Reset"
-              backgroundColor="#e70000"
-              color="white"
+              backgroundColor="#cc6666"
+              color="#cc6666"
+              icon="emoticon-devil-outline"
               onPress={() => {
                 reset({
                   title: "Title",
                   description: "Description",
+                  price: "Price",
                 });
               }}
-            />
+            >
+              Reset
+            </Button>
           </ResetButton>
 
           <SubmitButton>
             <Button
-              style={styles.buttonInner}
-              color="white"
+              compact={true}
+              icon="emoticon-cool-outline"
+              mode={"contained"}
+              backgroundColor="#7aa998"
+              color="#7aa998"
               title="Submit"
               onPress={() => {
                 onSubmit();
               }}
               disabled={isValid}
-            />
+            >
+              Submit
+            </Button>
           </SubmitButton>
         </ButtonContainer>
       </SafeAreaView>
@@ -580,7 +610,7 @@ const ResetButton = styled.View`
   margin-top: 40px;
   color: white;
   height: 40px;
-  background-color: #e70000;
+
   border-radius: 4px;
   width: 45%;
 `;
@@ -588,7 +618,6 @@ const SubmitButton = styled.View`
   margin-top: 40px;
   color: white;
   height: 40px;
-  background-color: #339933;
   border-radius: 4px;
   width: 45%;
 `;
@@ -599,6 +628,8 @@ const styles = StyleSheet.create({
     margin: 5,
     marginLeft: 0,
     opacity: 0.7,
+    fontSize: 16,
+    marginTop: 5,
   },
   button: {
     marginTop: 40,
@@ -620,16 +651,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
     opacity: 0.8,
-  },
-  divider: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "#f0f7f3",
-  },
-  textArea: {
-    height: Dimensions.get("window").height / 4,
-    justifyContent: "flex-start",
-    flexGrow: 1,
   },
   textAreaContainer: {
     borderRadius: 10,
