@@ -6,14 +6,18 @@ import GridCategories from "./GridCategories";
 export default function Home({ navigation }) {
   const [term, setTerm] = useState("");
 
+  const searchData = (searchText) => {
+    setTerm(searchText);
+    let filteredDataa = items.filter(function(item) {
+      return item.name.includes(searchText);
+    });
+    setFilteredData(filteredDataa);
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        <SearchBar
-          term={term}
-          // onTermChange={setTerm}
-          onTermSubmit={() => searchApi(term)}
-        />
+        <SearchBar />
       </SafeAreaView>
       <GridCategories />
     </View>
@@ -22,11 +26,10 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f5f5f5",
     flex: 1,
+    backgroundColor: "transparent",
   },
   products: {
-    backgroundColor: "#f5f1f5",
     marginTop: 400,
   },
   fashion: {

@@ -1,3 +1,8 @@
+import accessories from "../../../assets/accessories.jpg";
+import appliances from "../../../assets/appliances.jpg";
+import art from "../../../assets/art.jpg";
+import beauty from "../../../assets/beauty.jpg";
+import books from "../../../assets/books.jpg";
 export const Charities = [
   {
     title: "African Agricultural Technology Foundation (AATF)",
@@ -20,6 +25,7 @@ export const Charities = [
     value:
       "An investment organization, Acumen Fund provides capital for social enterprises. The organization focuses on funding innovative solutions in Sub-Saharan Africa, South Asia, Latin America, and the United States. Neither the markets nor aid alone can solve the problems of poverty. More than two billion people around the world lack access to essential goods and service, from clean water and electricity to education and the freedom to participate in the economy. Acumen is there to change that. Their vision is a world based on dignity, where every human being has the same opportunity.",
   },
+
   {
     title: "Aflatoun",
     value:

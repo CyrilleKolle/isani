@@ -84,8 +84,6 @@ export const submitSaleForm = (
   id,
   location
 ) => {
-  const userId = Firebase.auth().currentUser.uid;
-
   return new Promise((resolve, reject) => {
     Firebase.database()
       .ref("listings/")

@@ -1,34 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import Modal from "react-native-modal";
-import {
-  StyleSheet,
-  Platform,
-  Text,
-  Dimensions,
-  SafeAreaView,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useRoute } from "@react-navigation/native";
+import { StyleSheet, Platform, Dimensions, SafeAreaView } from "react-native";
 import { Paragraph, Title, Button } from "react-native-paper";
 
 function TextForm() {
-  const navigation = useNavigation();
-  const router = useRoute();
-  const creditCardRef = useRef();
   const [visible, setIsVisible] = useState(true);
-  const [isComplete, setIsComplete] = useState(false);
-  const [completeText, setCompleteText] = useState("");
-
-  const handleSubmit = useCallback(() => {
-    if (creditCardRef.current) {
-      const { error, data } = creditCardRef.current.submit();
-      setIsComplete(!isComplete);
-      setIsVisible(!visible);
-      console.log("ERROR: ", error);
-      console.log("CARD DATA: ", data);
-    }
-  }, []);
-
+  
   return (
     <>
       <SafeAreaView style={{ marginTop: 20 }}>

@@ -90,12 +90,14 @@ export default function Favorites() {
   const [cartArray, setCartArray] = useState([]);
   const [addToCart, setAddTocart] = useState([]);
   const [showPayForm, setShowPayForm] = useState(false);
+  const [userAvailaible, setUserAvailable] = useState();
 
   const userAuthenticated = async () => {
     const signedIn = await checkUser();
     if (signedIn) {
       const Id = Firebase.auth().currentUser.uid;
       setUserId(Id);
+      setUserAvailable(signedIn);
     }
   };
 
@@ -182,6 +184,7 @@ export default function Favorites() {
               <View>
                 <LocationAndFavorite>
                   <TouchableOpacity
+                    disabled={!userAvailaible}
                     onPress={() => {
                       favorite[index] = !favorite[index];
                       setFavorite(favorite);
@@ -206,7 +209,7 @@ export default function Favorites() {
                       )}
                     </Heart>
                   </TouchableOpacity>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => {
                       addToCart[index] = !addToCart[index];
                       setAddTocart(addToCart);
@@ -224,7 +227,7 @@ export default function Favorites() {
                         size={24}
                       />
                     </Heart>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </LocationAndFavorite>
                 <Location>
                   <View

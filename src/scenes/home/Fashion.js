@@ -4,10 +4,8 @@ import Categories from "../../components/AllCategories/Categories";
 import Male from "../../../assets/Male.jpg";
 import Female from "../../../assets/Female.jpg";
 import Kids from "../../../assets/Kids.jpg";
-import Constants from "expo-constants";
-export default function Fashion(props) {
-  const [term, setTerm] = useState("");
 
+export default function Fashion(props) {
   return (
     <SafeAreaView style={styles.container}>
       <View>

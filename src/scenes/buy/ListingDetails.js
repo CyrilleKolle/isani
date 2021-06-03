@@ -2,18 +2,44 @@ import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, Dimensions, StyleSheet } from "react-native";
 import Constants from "expo-constants";
 import { SliderBox } from "react-native-image-slider-box";
-import { List, Paragraph, Divider } from "react-native-paper";
+import { List, Paragraph, Divider, Button } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import { useRoute } from "@react-navigation/native";
+import UserView from "../../components/functions/UserView";
+import { checkUser } from "../../api/user/user";
+import { useNavigation } from "@react-navigation/native";
+import styled from "styled-components";
+import PayForm from "../../components/functions/PayForm";
 
+const PriceContent = styled.View`
+  background-color: #fe8019;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  margin-top: -50px;
+`;
 export default function ListingDetails() {
+  const navigation = useNavigation();
+  const [showPayForm, setShowPayForm] = useState(false);
   const route = useRoute();
   const [data, setNewData] = useState();
-
+  const [userAvailaible, setUserAvailable] = useState();
   useEffect(() => {
     setNewData(route.params.data);
-    console.log(data);
   });
+  const userAuthenticated = async () => {
+    const signedIn = await checkUser();
+    if (signedIn) {
+      setUserAvailable(signedIn);
+    }
+  };
+
+  useEffect(() => {
+    userAuthenticated();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -64,14 +90,37 @@ export default function ListingDetails() {
           </View>
         </List.Section>
       </ScrollView>
+      {!userAvailaible && <UserView />}
+
+      {userAvailaible && (
+        <PriceContent>
+          <Button
+            style={{
+              paddingRight: 6,
+              paddingLeft: 6,
+              paddingBottom: "auto",
+              paddingTop: "auto",
+            }}
+            mode={"contained"}
+            title=" Buy "
+            backgroundColor="#f4a201"
+            color="#f4a201"
+            onPress={() => {
+              setShowPayForm(!showPayForm);
+              //handleRemoveFavorite(item.id);
+            }}
+          >
+            Buy
+          </Button>
+        </PriceContent>
+      )}
+      {showPayForm && <PayForm />}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   slideImage: {
     justifyContent: "center",
     paddingTop: Constants.statusBarHeight,

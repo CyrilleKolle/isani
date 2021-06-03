@@ -6,10 +6,10 @@ import {
   FlatList,
   Image,
   RefreshControl,
-  Dimensions,
   TouchableOpacity,
   Animated,
 } from "react-native";
+import { Button } from "react-native-paper";
 import { useRoute } from "@react-navigation/native";
 import Firebase from "../../api/api";
 import { checkUser } from "../../api/user/user";
@@ -22,8 +22,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { handleSaveFavorite } from "../../api/user/user";
 import Toast from "react-native-root-toast";
 import PayForm from "../../components/functions/PayForm";
-
-const { width } = Dimensions.get("window").width;
+import Share from "../../components/functions/Share";
+import UserView from "../../components/functions/UserView";
 
 const ItemTextContainer = styled.View`
   margin-left: 10px;
@@ -47,6 +47,8 @@ const ItemLocation = styled.Text`
 `;
 const ItemPriceView = styled.View`
   align-content: center;
+  justify-content: space-between;
+  flex-direction: row;
 `;
 const ItemPriceText = styled.Text`
   font-size: 20px;
@@ -84,29 +86,29 @@ const TopInfo = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
+
 export default function Listings() {
   const navigation = useNavigation();
   const router = useRoute();
   const [data, setData] = useState([{}]);
   const [userId, setUserId] = useState();
+  const [userAvailaible, setUserAvailable] = useState();
   const [refreshing, setRefreshing] = useState(false);
-  const animation = new Animated.Value(0);
-  const inputRange = [0, 1];
-  const outputRange = [1, 0.8];
-  const scale = animation.interpolate({ inputRange, outputRange });
   const [loading, setLoading] = useState(true);
   const [favorite, setFavorite] = useState([]);
   const [favoriteList, setFavoriteList] = useState([{}]);
   const [addToCart, setAddTocart] = useState([]);
   const [cartArray, setCartArray] = useState([]);
   const [showPayForm, setShowPayForm] = useState(false);
-
+  const [currentUser, setCurrentUser] = useState();
   const userAuthenticated = async () => {
     const signedIn = await checkUser();
     if (signedIn) {
       const Id = Firebase.auth().currentUser.uid;
+      const c = Firebase.auth().currentUser;
       setUserId(Id);
-      console.log(userId);
+      setUserAvailable(signedIn);
+      setCurrentUser(c);
     }
   };
 
@@ -143,19 +145,15 @@ export default function Listings() {
     });
   };
 
-  const onPressIn = (index) => {
-    index &&
-      Animated.spring(animation, {
-        toValue: 1,
-        useNativeDriver: true,
-      }).start();
-  };
-  const onPressOut = (index) => {
-    index &&
-      Animated.spring(animation, {
-        toValue: 0,
-        useNativeDriver: true,
-      }).start();
+  const handleRemoveFavorite = (itemId) => {
+    var remRef = Firebase.database().ref("listings/" + userId);
+    remRef.on("child_added", (data) => {
+      var key = data.val();
+      console.log(key);
+      if (itemId === data.val().id) {
+        remRef.set(null);
+      }
+    });
   };
   const handleFavorite = async (item) => {
     console.log(favoriteList);
@@ -193,12 +191,7 @@ export default function Listings() {
   const renderItem = ({ item, index }) => (
     <>
       <Animated.View key={index} style={[styles.itemContainer]}>
-        <TouchableOpacity
-          key={index}
-          onPress={() => openDetails(item)}
-          onPressIn={() => onPressIn(favorite[index])}
-          onPressOut={() => onPressOut(favorite[index])}
-        >
+        <TouchableOpacity key={index} onPress={() => openDetails(item)}>
           <Image
             source={{ uri: item.image1 }}
             style={{ width: "100%", height: 180, borderRadius: 5 }}
@@ -207,16 +200,17 @@ export default function Listings() {
             <TopInfo>
               <View>
                 <ItemText>{item.title}</ItemText>
-                <ItemText numberOfLines={3}>{item.description}</ItemText>
+                <ItemText numberOfLines={2}>{item.description}</ItemText>
                 <ItemText numberOfLines={1}>{item.charity}</ItemText>
               </View>
               <View>
                 <LocationAndFavorite>
                   <TouchableOpacity
+                    disabled={!userAvailaible}
                     onPress={() => {
-                      favorite[index] = !favorite[index];
+                      favorite[index + 1] = !favorite[index + 1];
                       setFavorite(favorite);
-                      if (favorite[index]) {
+                      if (favorite[index + 1]) {
                         setFavoriteList((favoriteList) => [
                           ...favoriteList,
                           item,
@@ -228,16 +222,16 @@ export default function Listings() {
                     }}
                   >
                     <Heart>
-                      {!favorite[index] && (
+                      {!favorite[index + 1] && (
                         <MaterialCommunityIcons
-                          name={favorite[index] ? "heart" : "heart-outline"}
-                          color={favorite[index] ? "red" : "gray"}
+                          name={favorite[index + 1] ? "heart" : "heart-outline"}
+                          color={favorite[index + 1] ? "red" : "gray"}
                           size={24}
                         />
                       )}
                     </Heart>
                   </TouchableOpacity>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => {
                       addToCart[index] = !addToCart[index];
                       setAddTocart(addToCart);
@@ -257,7 +251,7 @@ export default function Listings() {
                         size={24}
                       />
                     </Heart>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </LocationAndFavorite>
                 <Location>
                   <View style={{ alignItems: "flex-end" }}>
@@ -271,12 +265,36 @@ export default function Listings() {
             </TopInfo>
             <ItemPriceView>
               <TouchableOpacity
+                disabled={!userAvailaible}
                 onPress={() => {
                   setShowPayForm(!showPayForm);
+                  handleRemoveFavorite(item.id);
                 }}
               >
                 <ItemPriceText>{item.price} kr</ItemPriceText>
               </TouchableOpacity>
+
+              <Button
+                disabled={!userAvailaible}
+                style={{
+                  paddingRight: 6,
+                  paddingLeft: 6,
+                  paddingBottom: "auto",
+                  paddingTop: "auto",
+                }}
+                mode={"contained"}
+                title=" Buy "
+                backgroundColor="#f4a201"
+                color="#f4a201"
+                onPress={() => {
+                  setShowPayForm(!showPayForm);
+                  handleRemoveFavorite(item.id);
+                }}
+              >
+                Buy
+              </Button>
+
+              <Share message={`check out ${item.title} from isani app`} />
             </ItemPriceView>
           </ItemTextContainer>
         </TouchableOpacity>
@@ -317,6 +335,7 @@ export default function Listings() {
           <>
             <View style={styles.container}>
               <FlatList
+                initialNumToRender={3}
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={<ListingHeader />}
                 data={
@@ -327,7 +346,7 @@ export default function Listings() {
                           content.category === router.params.item.name
                       )
                 }
-                keyExtractor={(item, index) => item.title}
+                keyExtractor={(item, index) => item.id}
                 renderItem={renderItem}
                 refreshControl={
                   <RefreshControl
@@ -350,6 +369,7 @@ export default function Listings() {
         <>
           <View style={styles.container}>
             <FlatList
+              initialNumToRender={3}
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={<Header />}
               data={
@@ -359,7 +379,7 @@ export default function Listings() {
                       (content) => content.category === router.params.item.name
                     )
               }
-              keyExtractor={(item, index) => item.title}
+              keyExtractor={(item, index) => item.id}
               renderItem={renderItem}
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -369,6 +389,8 @@ export default function Listings() {
           </View>
         </>
       )}
+      {!userAvailaible && <UserView />}
+
       {showPayForm && <PayForm />}
     </>
   );
@@ -376,7 +398,6 @@ export default function Listings() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,

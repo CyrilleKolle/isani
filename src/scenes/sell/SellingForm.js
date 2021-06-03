@@ -22,7 +22,7 @@ import ImageBackground from "../../../assets/imageBg.png";
 import styled from "styled-components";
 import { submitSaleForm } from "../../api/user/user";
 import { categoriesList } from "../../components/Lists/categoriesList";
-import uuid from "react-native-uuid";
+import { useRoute } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { KeyboardAvoidingView } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -65,6 +65,7 @@ const TextSelectContainer = styled.View`
 `;
 export const SellingForm = () => {
   const navigation = useNavigation();
+  const router = useRoute();
   const modalizeRef = useRef(null);
   const modalizeRefCharity = useRef(null);
   const [list, setList] = useState({});
@@ -76,7 +77,9 @@ export const SellingForm = () => {
   const [image4, setImage4] = useState("");
   const [image5, setImage5] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedCharity, setSelectedCharity] = useState();
+  const [selectedCharity, setSelectedCharity] = useState(
+    router.params !== undefined ? router.params.charity : ""
+  );
   const [categoryItem, setCategoryItem] = useState();
   const [feedback, SetFeedback] = useState("");
   const [descriptionText, setDescriptionText] = useState("");
@@ -441,11 +444,10 @@ export const SellingForm = () => {
                       ref={modalizeRefCharity}
                       adjustToContentHeight={true}
                       flatListProps={{
+                        initialNumToRender:10,
                         data: Charities,
                         renderItem: ({ item, index }) => {
                           value = item.title;
-                          //console.log(item.index);
-
                           return (
                             <View style={styles.modalTextView}>
                               <TouchableOpacity
@@ -513,6 +515,7 @@ export const SellingForm = () => {
                     adjustToContentHeight={true}
                     flatListProps={{
                       data: categoriesList,
+                      initialNumToRender:10,
                       renderItem: ({ item, index }) => {
                         value = item.title;
                         return (

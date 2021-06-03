@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useRoute } from "@react-navigation/native";
 import logo from "../../../assets/logo.png";
 
-const Wrapper = styled.View``;
 const TitleText = styled.Text`
   font-size: 30px;
   font-weight: 900;

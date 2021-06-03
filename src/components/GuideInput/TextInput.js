@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("screen");
 
 export default function TextInput({ labelName, ...rest }) {
   return (
-    <Text style={styles.input} numberOfLines={1} {...rest} >
+    <Text style={styles.input} numberOfLines={1} {...rest}>
       {labelName}
     </Text>
   );
@@ -14,8 +14,6 @@ export default function TextInput({ labelName, ...rest }) {
 
 const styles = StyleSheet.create({
   input: {
-
-
     width: width / 1.5,
     height: height / 15,
   },

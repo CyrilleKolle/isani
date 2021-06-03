@@ -11,7 +11,6 @@ const AButton = ({
   bordered = false,
   size = "large",
 }) => {
-  const buttonHeight = height * 0.06;
   const large = width / 1.5;
   const small = width / 2;
   const btnSize = size === "large" ? large : small;
@@ -25,7 +24,6 @@ const AButton = ({
     width: btnSize,
     borderRadius: btnBorderRadius,
     marginBottom: 10,
-    // height: buttonHeight,
   };
 
   const textCommonStyle = {
@@ -35,7 +33,6 @@ const AButton = ({
     textAlign: "center",
     marginBottom: 8,
     marginTop: 8,
-    // fontFamily: "Quicksand-Medium",
   };
 
   const border = type === "outlined" && {

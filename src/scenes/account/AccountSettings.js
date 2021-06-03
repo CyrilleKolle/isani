@@ -1,20 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Button,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
-import { CommonActions } from "@react-navigation/native";
-import { checkUser } from "../../api/user/user";
-import { accountList } from "../../components/Lists/accountList";
-import AButton from "../../components/GuideInput/AButton";
-import * as firebase from "firebase";
-import TermsContext from "../../components/Context/accountContext/TermsContext";
+import React from "react";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 
 export default function AccountSettings() {
   return (

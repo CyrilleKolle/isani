@@ -30,6 +30,9 @@ function PayForm() {
       setIsVisible(!visible);
       console.log("ERROR: ", error);
       console.log("CARD DATA: ", data);
+      setTimeout(() => {
+        navigation.navigate("Listings");
+      }, 500);
     }
   }, []);
 
@@ -60,7 +63,7 @@ function PayForm() {
             <Button
               title="Cancel"
               onPress={() => {
-                setIsVisible(!visible);          
+                setIsVisible(!visible);
               }}
             />
             <Button title="Pay" onPress={handleSubmit} />

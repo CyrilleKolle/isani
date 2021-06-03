@@ -44,7 +44,7 @@ function SignUp({ navigation, setSignIn }) {
       </View>
 
       <View style={styles.container}>
-        <Title style={styles.titleText}>Register to chat</Title>
+        <Title style={styles.titleText}>welcome to isani</Title>
         <AInput
           labelName="Email"
           value={email}

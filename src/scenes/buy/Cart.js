@@ -6,7 +6,7 @@ export default function Cart() {
   const [cartData, setCartData] = useState([]);
   const [isModalCartVisible, setModalCartVisible] = useState(false);
   return (
-    <View >
+    <View>
       <Modal isVisible={isModalVisible}>
         <View style={{ flex: 1 }}>
           <Text>Hello!</Text>
